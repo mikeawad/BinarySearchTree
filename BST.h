@@ -46,23 +46,24 @@ class BST
     Postcondition: Returns true if BST is empty and false otherwise.
    -----------------------------------------------------------------------*/
 
-  bool search(const DataType & item) const; 
+  bool search(const DataType & item) const;
   /*------------------------------------------------------------------------
     Search the BST for item.
 
     Precondition:  None.
     Postcondition: Returns true if item found, and false otherwise.
    -----------------------------------------------------------------------*/
-   
+
   void insert(const DataType & item);
   /*------------------------------------------------------------------------
     Insert item into BST.
 
     Precondition:  None.
-    Postcondition: BST has been modified with item inserted at proper 
-        position to maintain BST property. 
+    Postcondition: BST has been modified with item inserted at proper
+        position to maintain BST property.
   ------------------------------------------------------------------------*/
-  
+
+
   void remove(const DataType & item);
   /*------------------------------------------------------------------------
     Remove item from BST.
@@ -73,17 +74,17 @@ class BST
     Note: remove uses auxiliary function search2() to locate the node
           containing item and its parent.
  ------------------------------------------------------------------------*/
- 
+
   void inorder(ostream & out) const;
   /*------------------------------------------------------------------------
     Inorder traversal of BST.
 
     Precondition:  ostream out is open.
-    Postcondition: BST has been inorder traversed and values in nodes 
+    Postcondition: BST has been inorder traversed and values in nodes
         have been output to out.
     Note: inorder uses private auxiliary function inorderAux().
  ------------------------------------------------------------------------*/
- 
+
   void graph(ostream & out) const;
   /*------------------------------------------------------------------------
     Graphic output of BST.
@@ -92,10 +93,10 @@ class BST
     Postcondition: Graphical representation of BST has been output to out.
     Note: graph() uses private auxiliary function graphAux().
  ------------------------------------------------------------------------*/
- 
+int leafCount();
  private:
   /***** Node class *****/
-  class BinNode 
+  class BinNode
   {
    public:
     DataType data;
@@ -112,53 +113,57 @@ class BST
     BinNode(DataType item)
     : data(item), left(0), right(0)
     {}
- 
+
   };// end of class BinNode declaration
 
-  typedef BinNode * BinNodePointer; 
-  
+  typedef BinNode * BinNodePointer;
+
+int leafCountAux(BinNodePointer subtreeRoot);
+
+
   /***** Private Function Members *****/
   void search2(const DataType & item, bool & found,
                BinNodePointer & locptr, BinNodePointer & parent) const;
  /*------------------------------------------------------------------------
    Locate a node containing item and its parent.
- 
+
    Precondition:  None.
-   Postcondition: locptr points to node containing item or is null if 
+   Postcondition: locptr points to node containing item or is null if
        not found, and parent points to its parent.#include <iostream>
  ------------------------------------------------------------------------*/
- 
-  void inorderAux(ostream & out, 
+
+  void inorderAux(ostream & out,
                   BinNodePointer subtreePtr) const;
   /*------------------------------------------------------------------------
     Inorder traversal auxiliary function.
 
-    Precondition:  ostream out is open; subtreePtr points to a subtree 
+    Precondition:  ostream out is open; subtreePtr points to a subtree
         of this BST.
     Postcondition: Subtree with root pointed to by subtreePtr has been
         output to out.
  ------------------------------------------------------------------------*/
- 
+
   void graphAux(ostream & out, int indent,
                       BinNodePointer subtreeRoot) const;
   /*------------------------------------------------------------------------
     Graph auxiliary function.
 
-    Precondition:  ostream out is open; subtreePtr points to a subtree 
+    Precondition:  ostream out is open; subtreePtr points to a subtree
         of this BST.
-    Postcondition: Graphical representation of subtree with root pointed 
+    Postcondition: Graphical representation of subtree with root pointed
         to by subtreePtr has been output to out, indented indent spaces.
  ------------------------------------------------------------------------*/
- 
+
  /***** Data Members *****/
-  BinNodePointer myRoot; 
+  BinNodePointer myRoot;
+  int leafCounter;
 
 }; // end of class template declaration
 
 //--- Definition of constructor
 template <typename DataType>
 inline BST<DataType>::BST()
-: myRoot(0)
+: myRoot(0), leafCounter(0)
 {}
 
 //--- Definition of empty()
@@ -188,7 +193,7 @@ bool BST<DataType>::search(const DataType & item) const
 template <typename DataType>
 inline void BST<DataType>::insert(const DataType & item)
 {
-   BinNodePointer 
+   BinNodePointer
         locptr = myRoot,   // search pointer
         parent = 0;        // pointer to parent of current node
    bool found = false;     // indicates if item already in BST
@@ -204,7 +209,7 @@ inline void BST<DataType>::insert(const DataType & item)
    }
    if (!found)
    {                                 // construct node containing item
-      locptr = new BinNode(item);  
+      locptr = new BinNode(item);
       if (parent == 0)               // empty tree
          myRoot = locptr;
       else if (item < parent->data )  // insert to left of parent
@@ -221,7 +226,7 @@ template <typename DataType>
 void BST<DataType>::remove(const DataType & item)
 {
    bool found;                      // signals if item is found
-   BinNodePointer 
+   BinNodePointer
       x,                            // points to node to be deleted
       parent;                       //    "    " parent of x and xSucc
    search2(item, found, x, parent);
@@ -243,21 +248,21 @@ void BST<DataType>::remove(const DataType & item)
          xSucc = xSucc->left;
       }
 
-     // Move contents of xSucc to x and change x 
+     // Move contents of xSucc to x and change x
      // to point to successor, which will be removed.
      x->data = xSucc->data;
      x = xSucc;
    } // end if node has 2 children
 
    // Now proceed with case where node has 0 or 2 child
-   BinNodePointer 
+   BinNodePointer
       subtree = x->left;             // pointer to a subtree of x
    if (subtree == 0)
       subtree = x->right;
    if (parent == 0)                  // root being removed
       myRoot = subtree;
    else if (parent->left == x)       // left child of parent
-      parent->left = subtree; 
+      parent->left = subtree;
    else                              // right child of parent
       parent->right = subtree;
    delete x;
@@ -266,8 +271,8 @@ void BST<DataType>::remove(const DataType & item)
 //--- Definition of inorder()
 template <typename DataType>
 inline void BST<DataType>::inorder(ostream & out) const
-{ 
-   inorderAux(out, myRoot); 
+{
+   inorderAux(out, myRoot);
 }
 
 //--- Definition of graph()
@@ -278,7 +283,7 @@ inline void BST<DataType>::graph(ostream & out) const
 //--- Definition of search2()
 template <typename DataType>
 void BST<DataType>::search2(const DataType & item, bool & found,
-                            BinNodePointer & locptr, 
+                            BinNodePointer & locptr,
                             BinNodePointer & parent) const
 {
    locptr = myRoot;
@@ -303,7 +308,7 @@ void BST<DataType>::search2(const DataType & item, bool & found,
 
 //--- Definition of inorderAux()
 template <typename DataType>
-void BST<DataType>::inorderAux(ostream & out, 
+void BST<DataType>::inorderAux(ostream & out,
                                BinNodePointer subtreeRoot) const
 {
    if (subtreeRoot != 0)
@@ -314,11 +319,36 @@ void BST<DataType>::inorderAux(ostream & out,
    }
 }
 
+template <typename DataType>
+int BST<DataType>::leafCountAux(BinNodePointer subtreeRoot)
+{
+
+    if (subtreeRoot->left == 0 && subtreeRoot->right == 0)
+    {
+        leafCounter++;
+    }
+    else
+    {
+        if (subtreeRoot->left != 0)
+            leafCountAux(subtreeRoot->left);
+
+        if (subtreeRoot->right != 0)
+            leafCountAux(subtreeRoot->right);
+    }
+    return leafCounter;
+}
+
+template <typename DataType>
+int BST<DataType>::leafCount()
+{
+    return leafCountAux(myRoot);
+}
+
 //--- Definition of graphAux()
 #include <iomanip>
 
 template <typename DataType>
-void BST<DataType>::graphAux(ostream & out, int indent, 
+void BST<DataType>::graphAux(ostream & out, int indent,
                              BinNodePointer subtreeRoot) const
 {
   if (subtreeRoot != 0)
