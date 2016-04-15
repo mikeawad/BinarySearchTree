@@ -159,17 +159,14 @@ int heightCountAux(BinNodePointer subtreeRoot); /// <---------------------------
  /***** Data Members *****/
   BinNodePointer myRoot;
   int leafCounter;      /// <-----------------------------------------------| code added |
-  //int height;           /// <-----------------------------------------------| code added |
-  int functionCall;     /// <-----------------------------------------------| code added |
-   public:
-    int height;
+  int leftSubTree, rightSubTree;           /// <-----------------------------------------------| code added |
 
 }; // end of class template declaration
 
 //--- Definition of constructor
 template <typename DataType>
 inline BST<DataType>::BST()
-: myRoot(0), leafCounter(0), height(0), functionCall(0)   /// <-----------------------------------------------| code added |
+: myRoot(0), leafCounter(0), leftSubTree(0), rightSubTree(0)   /// <-----------------------------------------------| code added |
 {}
 
 //--- Definition of empty()
@@ -348,27 +345,13 @@ template <typename DataType>
 int BST<DataType>::heightCountAux(BinNodePointer subtreeRoot)  /// <-----------------------------------------------| code added |
 {
 
-    if (subtreeRoot == 0)
-    {
+    if (!subtreeRoot)
         return 0;
-    }
 
-    else if (subtreeRoot->left != 0 && subtreeRoot->right != 0)
-    {
-            functionCall++;
-            if (subtreeRoot->left != 0)
-                heightCountAux(subtreeRoot->left);
+    leftSubTree = heightCountAux(subtreeRoot->left);
+    rightSubTree = heightCountAux(subtreeRoot->right);
+    return max(leftSubTree, rightSubTree) + 1;
 
-            if(subtreeRoot == myRoot)
-            {
-                height = functionCall;
-                functionCall = 0;
-                cout << "height = " << height;
-            }
-            if (subtreeRoot->right != 0)
-                heightCountAux(subtreeRoot->right);
-    }
-    return functionCall;
 }
 
 
