@@ -93,7 +93,8 @@ class BST
     Postcondition: Graphical representation of BST has been output to out.
     Note: graph() uses private auxiliary function graphAux().
  ------------------------------------------------------------------------*/
-int leafCount();
+int leafCount();    /// <-----------------------------------------------| code added |
+int heightCount();  /// <-----------------------------------------------| code added |
  private:
   /***** Node class *****/
   class BinNode
@@ -118,7 +119,8 @@ int leafCount();
 
   typedef BinNode * BinNodePointer;
 
-int leafCountAux(BinNodePointer subtreeRoot);
+int leafCountAux(BinNodePointer subtreeRoot);   /// <-----------------------------------------------| code added |
+int heightCountAux(BinNodePointer subtreeRoot); /// <-----------------------------------------------| code added |
 
 
   /***** Private Function Members *****/
@@ -156,14 +158,18 @@ int leafCountAux(BinNodePointer subtreeRoot);
 
  /***** Data Members *****/
   BinNodePointer myRoot;
-  int leafCounter;
+  int leafCounter;      /// <-----------------------------------------------| code added |
+  //int height;           /// <-----------------------------------------------| code added |
+  int functionCall;     /// <-----------------------------------------------| code added |
+   public:
+    int height;
 
 }; // end of class template declaration
 
 //--- Definition of constructor
 template <typename DataType>
 inline BST<DataType>::BST()
-: myRoot(0), leafCounter(0)
+: myRoot(0), leafCounter(0), height(0), functionCall(0)   /// <-----------------------------------------------| code added |
 {}
 
 //--- Definition of empty()
@@ -320,7 +326,7 @@ void BST<DataType>::inorderAux(ostream & out,
 }
 
 template <typename DataType>
-int BST<DataType>::leafCountAux(BinNodePointer subtreeRoot)
+int BST<DataType>::leafCountAux(BinNodePointer subtreeRoot) /// <-----------------------------------------------| code added |
 {
 
     if (subtreeRoot->left == 0 && subtreeRoot->right == 0)
@@ -339,9 +345,45 @@ int BST<DataType>::leafCountAux(BinNodePointer subtreeRoot)
 }
 
 template <typename DataType>
-int BST<DataType>::leafCount()
+int BST<DataType>::heightCountAux(BinNodePointer subtreeRoot)  /// <-----------------------------------------------| code added |
+{
+
+    if (subtreeRoot == 0)
+    {
+        return 0;
+    }
+
+    else if (subtreeRoot->left != 0 && subtreeRoot->right != 0)
+    {
+            functionCall++;
+            if (subtreeRoot->left != 0)
+                heightCountAux(subtreeRoot->left);
+
+            if(subtreeRoot == myRoot)
+            {
+                height = functionCall;
+                functionCall = 0;
+                cout << "height = " << height;
+            }
+            if (subtreeRoot->right != 0)
+                heightCountAux(subtreeRoot->right);
+    }
+    return functionCall;
+}
+
+
+
+template <typename DataType>
+int BST<DataType>::leafCount()   /// <-----------------------------------------------| code added |
 {
     return leafCountAux(myRoot);
+}
+
+
+template <typename DataType>
+int BST<DataType>::heightCount()   /// <-----------------------------------------------| code added |
+{
+    return heightCountAux(myRoot);
 }
 
 //--- Definition of graphAux()
