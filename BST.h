@@ -158,8 +158,7 @@ int heightCountAux(BinNodePointer subtreeRoot); /// <---------------------------
 
  /***** Data Members *****/
   BinNodePointer myRoot;
-  int leafCounter;      /// <-----------------------------------------------| code added |
-  int leftSubTree, rightSubTree;           /// <-----------------------------------------------| code added |
+  int leafCounter, leftSubTree, rightSubTree;                 /// <-----------------------------------------------| code added |
 
 }; // end of class template declaration
 
@@ -345,12 +344,35 @@ template <typename DataType>
 int BST<DataType>::heightCountAux(BinNodePointer subtreeRoot)  /// <-----------------------------------------------| code added |
 {
 
-    if (!subtreeRoot)
-        return 0;
+    subtreeRoot ? (cout << "Node " << subtreeRoot->data << endl): (cout  <<   "null" << endl);
 
-    leftSubTree = heightCountAux(subtreeRoot->left);
-    rightSubTree = heightCountAux(subtreeRoot->right);
-    return max(leftSubTree, rightSubTree) + 1;
+
+    if(empty())
+    {
+        cout << "returning empty" << endl;
+        return 0;
+    }
+
+
+    else if (subtreeRoot == 0)
+    {
+        cout << "returning subtreeRoot == 0" << endl;
+        return 0;
+    }
+
+    else
+    {
+        cout << "traversing left from " << subtreeRoot->data << endl << endl;
+        leftSubTree = heightCountAux(subtreeRoot->left);
+
+
+        cout << "traversing right from " << subtreeRoot->data << endl << endl;
+        rightSubTree = heightCountAux(subtreeRoot->right);
+
+        cout << "node " <<  subtreeRoot->data << " returning "  << max(leftSubTree, rightSubTree) + 1 << endl << endl;
+        return max(leftSubTree, rightSubTree) + 1;
+    }
+
 
 }
 
