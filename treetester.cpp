@@ -7,6 +7,7 @@ using namespace std;
 
 #include "BST.h"
 
+
 int main()
 {
    // Testing Constructor and empty()
@@ -29,18 +30,19 @@ int main()
 
    intBST.insert(625);
    intBST.insert(875);
-
+/*
    intBST.insert(120);
    intBST.insert(130);
 
    intBST.insert(370);
    intBST.insert(380);
-/*
+
    intBST.insert(630);
    intBST.insert(620);
 
    intBST.insert(870);
    intBST.insert(880);
+
    intBST.insert(835);
 
 */
@@ -69,8 +71,8 @@ int main()
 
    cout << endl;
 
-   cout << endl << "Number of leaves = " << intBST.leafCount() << endl;
-   cout << endl << "Tree height = " << intBST.heightCount() << endl;
+   cout << endl << "Number of leaves = " << intBST.leafCount();
+   cout << endl << "Tree height      = " << intBST.heightCount() << endl;
 
 /*
    // Testing search()
