@@ -158,14 +158,14 @@ int heightCountAux(BinNodePointer subtreeRoot); /// <---------------------------
 
  /***** Data Members *****/
   BinNodePointer myRoot;
-  int leafCounter, leftSubTree, rightSubTree;                 /// <-----------------------------------------------| code added |
+  int leafCounter;                    /// <-----------------------------------------------| code added |
 
 }; // end of class template declaration
 
 //--- Definition of constructor
 template <typename DataType>
 inline BST<DataType>::BST()
-: myRoot(0), leafCounter(0), leftSubTree(0), rightSubTree(0)   /// <-----------------------------------------------| code added |
+: myRoot(0), leafCounter(0)          /// <-----------------------------------------------| code added |
 {}
 
 //--- Definition of empty()
@@ -322,19 +322,24 @@ void BST<DataType>::inorderAux(ostream & out,
 }
 
 template <typename DataType>
-int BST<DataType>::leafCountAux(BinNodePointer subtreeRoot) /// <-----------------------------------------------| code added |
+int BST<DataType>::leafCountAux(BinNodePointer subtreeRoot)     /// <-----------------------------------------------| code added |
 {
-
-    if (subtreeRoot->left == 0 && subtreeRoot->right == 0)
+    if (empty())                                                /// check if list completely empty
     {
-        leafCounter++;
+        cout << endl << "List is empty" << endl;
+        return 0;
+    }
+
+    else if (subtreeRoot->left == 0 && subtreeRoot->right == 0) /// left and right pointer indicates leaf node found
+    {
+        leafCounter++;                                          /// increment counter after finding leaf node
     }
     else
     {
-        if (subtreeRoot->left != 0)
+        if (subtreeRoot->left)                                  /// traverse left after null check
             leafCountAux(subtreeRoot->left);
 
-        if (subtreeRoot->right != 0)
+        if (subtreeRoot->right)                                 /// traverse right after null check
             leafCountAux(subtreeRoot->right);
     }
     return leafCounter;
@@ -343,50 +348,33 @@ int BST<DataType>::leafCountAux(BinNodePointer subtreeRoot) /// <---------------
 template <typename DataType>
 int BST<DataType>::heightCountAux(BinNodePointer subtreeRoot)  /// <-----------------------------------------------| code added |
 {
-
-    subtreeRoot ? (cout << "Node " << subtreeRoot->data << endl): (cout  <<   "null" << endl);
-
-
-    if(empty())
+    if(empty())                                                /// check if tree is empty
     {
-        cout << "returning empty" << endl;
         return 0;
     }
 
-
-    else if (subtreeRoot == 0)
+    else if (subtreeRoot == 0)                                 /// check if leaf node reached
     {
-        cout << "returning subtreeRoot == 0" << endl;
         return 0;
     }
 
-    else
+    else                                                       /// recursively traverse entire tree, left side(s) first
     {
-        cout << "traversing left from " << subtreeRoot->data << endl << endl;
-        leftSubTree = heightCountAux(subtreeRoot->left);
-
-
-        cout << "traversing right from " << subtreeRoot->data << endl << endl;
-        rightSubTree = heightCountAux(subtreeRoot->right);
-
-        cout << "node " <<  subtreeRoot->data << " returning "  << max(leftSubTree, rightSubTree) + 1 << endl << endl;
+        int leftSubTree = heightCountAux(subtreeRoot->left);
+        int rightSubTree = heightCountAux(subtreeRoot->right);
         return max(leftSubTree, rightSubTree) + 1;
     }
 
-
 }
 
-
-
 template <typename DataType>
-int BST<DataType>::leafCount()   /// <-----------------------------------------------| code added |
+int BST<DataType>::leafCount()                                 /// <-----------------------------------------------| code added |
 {
     return leafCountAux(myRoot);
 }
 
-
 template <typename DataType>
-int BST<DataType>::heightCount()   /// <-----------------------------------------------| code added |
+int BST<DataType>::heightCount()                                /// <-----------------------------------------------| code added |
 {
     return heightCountAux(myRoot);
 }
